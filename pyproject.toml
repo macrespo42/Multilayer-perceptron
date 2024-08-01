@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "multilayer-perceptron"
+version = "0.1.0"
+description = ""
+authors = ["macrespo42 <macrespo@student.42.fr>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^2.0.1"
+pandas = "^2.2.2"
+matplotlib = "^3.9.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
