@@ -18,3 +18,12 @@ ruff = "^0.5.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["E501", "UP", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
