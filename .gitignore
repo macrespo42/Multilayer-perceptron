@@ -254,3 +254,6 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/python,linux,macos,venv,vim
+
+# Dont push datasets features
+multilayer_perceptron/datasets/
