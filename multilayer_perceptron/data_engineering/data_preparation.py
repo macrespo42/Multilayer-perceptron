@@ -12,10 +12,10 @@ def encode_categorical_variables(column: pd.Series, a: str, b: str) -> pd.Series
     return column.map({a: 1, b: 0})
 
 
-def standardization(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
+def standardize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """Standardize given column of a dataset using z-score.
 
-    standardization(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
+    standardize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """
     for column in columns:
         x = df[column]
@@ -23,10 +23,10 @@ def standardization(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     return df
 
 
-def normalization(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
+def normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """Normalize given column of a dataframe using min-max.
 
-    normalization(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
+    normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """
     for column in columns:
         x = df[column]
