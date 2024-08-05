@@ -69,5 +69,4 @@ def read_csv_with_WDBC_headers(csv_path: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
     df = read_csv_with_WDBC_headers(sys.argv[1])
-    print(df.head())
-    print(df.loc[df.diagnosis == "B"].head())
+    print(df.head(100))
