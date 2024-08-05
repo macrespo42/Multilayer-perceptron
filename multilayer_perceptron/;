@@ -1,0 +1,11 @@
+"""Collection of algorithm used in machine learning models."""
+
+import numpy as np
+
+
+def sigmoid(x) -> np.float64:
+    """Apply sigmoid on a numpy array.
+
+    sigmoid(x) -> np.float64
+    """
+    return 1 / (1 + np.exp(x))
