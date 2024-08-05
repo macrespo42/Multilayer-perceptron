@@ -3,17 +3,18 @@
 import numpy as np
 
 
-def sigmoid(x) -> np.float64:
+def sigmoid(x: np.ndarray) -> np.ndarray:
     """Apply sigmoid on a numpy array.
 
-    sigmoid(x) -> np.float64
+    sigmoid(x: np.ndarray) -> np.ndarray:
     """
     return 1 / (1 + np.exp(x))
 
 
-def softmax(z, k, j) -> np.float64:
+def softmax(z: np.ndarray) -> np.ndarray:
     """Implementation of the softmax algorithm.
 
-    def softmax(z):
+    softmax(z: np.ndarray) -> np.ndarray:
     """
-    return np.exp(z) / np.sum(np.exp(z[j:k]))
+    exp_z = np.exp(z)
+    return exp_z / np.sum(exp_z)
