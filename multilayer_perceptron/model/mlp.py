@@ -4,29 +4,26 @@ import numpy as np
 from algorithm import sigmoid, softmax
 
 
-class Layer:
+class DenseLayer:
     """Layer of a mlp."""
 
-    def __init__(self, n_perceptron, activation="sigmoid") -> None:
+    def __init__(self, n_inputs, n_neurons, activation="sigmoid") -> None:
         """Layer constructor."""
-        # TODO only for testing
-        self.inputs = [1, 2, 3, 2.5]
-        # END OF TODO
-        self.weights = np.array([[0.2, 0.8, -0.5, 1.0], [0.5, -0.91, 0.26, -0.5], [-0.26, -0.27, 0.17, 0.87]])
-        self.bias = [2, 3, 0.5]
-        self.n_perceptron = n_perceptron
+        self.n_neurons = n_neurons
+
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+        self.bias = np.zeros((1, self.n_neurons))
 
         if activation == "sigmoid":
             self.activation = sigmoid
         elif activation == "softmax":
             self.activation = softmax
+        else:
+            raise NotImplementedError(f"{activation} activation function is not implemented.")
 
-    def output(self):
-        """Placeholder."""
-        outputs = []
-        for i in range(len(self.weights)):
-            outputs.append(np.dot(self.inputs, self.weights[i]) + self.bias[i])
-        return outputs
+    def forward(self, inputs):
+        """Output of the perceptron."""
+        self.output = np.dot(inputs, self.weights) + self.bias
 
 
 class MultilayerPerceptron:
@@ -36,5 +33,12 @@ class MultilayerPerceptron:
 
 
 if __name__ == "__main__":
-    layer = Layer(4, activation="sigmoid")
-    print(layer.output())
+    np.random.seed(0)
+    X = np.array([[1.0, 2.0, 3.0, 2.5], [2.0, 5.0, -1.0, 2.0], [-1.5, 2.7, 3.3, -0.8]])
+
+    layer1 = DenseLayer(4, 5)
+    layer2 = DenseLayer(5, 2)
+
+    layer1.forward(X)
+    layer2.forward(layer1.output)
+    print(layer2.output)
