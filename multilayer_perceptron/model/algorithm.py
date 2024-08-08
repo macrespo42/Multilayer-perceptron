@@ -1,5 +1,6 @@
-"""Collection of algorithm used in machine learning models."""
+"""Collection of algorithm used by machine learning models."""
 
+from typing import Any
 import numpy as np
 
 
@@ -27,3 +28,19 @@ def rlu(z: np.ndarray) -> np.ndarray:
     """
     z[z < 0] = 0
     return z
+
+
+def binary_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]:
+    """Implementation of binary cross entropy algorithm.
+
+    binary_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]
+    """
+    return np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
+
+
+def categorical_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]:
+    """Implementation of categorical cross entropy algorithm.
+
+    categorical_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]:
+    """
+    return -np.sum(y * np.log(p))

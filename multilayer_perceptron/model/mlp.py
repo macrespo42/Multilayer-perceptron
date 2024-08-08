@@ -18,14 +18,20 @@ class DenseLayer:
         self.bias = np.zeros((1, self.n_neurons))
         self.activation = activation
 
-    def forward(self, inputs):
-        """Output of the perceptron."""
+    def forward(self, inputs) -> None:
+        """Output of the perceptron.
+
+        forward(self, inputs) -> Any
+        """
         self.output = np.dot(inputs, self.weights) + self.bias
 
-    def activate(self):
-        """Placeholder."""
+    def activate(self) -> np.ndarray | None:
+        """Apply activation function to the neurons output.
+
+        activate(self) -> np.ndarray | None
+        """
         activate_output = None
-        if self.output:
+        if self.output is not None:
             if self.activation == "sigmoid":
                 activate_output = sigmoid(self.output)
             elif self.activation == "softmax":
@@ -35,14 +41,6 @@ class DenseLayer:
             else:
                 raise NotImplementedError(f"{self.activation} activation function is not implemented.")
         return activate_output
-
-
-class ActivationReLU:
-    """Placeholder."""
-
-    def forward(self, inputs):
-        """Placeholder."""
-        self.output = np.maximum(0, inputs)
 
 
 class MultilayerPerceptron:
@@ -57,9 +55,21 @@ if __name__ == "__main__":
 
     X, y = spiral_data(100, 3)
 
-    layer1 = DenseLayer(2, 5)
-    activation1 = ActivationReLU()
+    layer1 = DenseLayer(2, 3, activation="rlu")
+    layer2 = DenseLayer(3, 3, activation="softmax")
 
     layer1.forward(X)
-    activation1.forward(layer1.output)
-    print(activation1.output)
+    layer2.forward(layer1.activate())
+
+    output = layer2.activate()
+    if output is not None:
+        print(output[:5])
+        predictions = np.argmax(output, axis=1)
+        accuracy = np.mean(predictions == y)
+        print(f"Accuracy: {accuracy}")
+
+    # softmax_output = np.array([0.7, 0.1, 0.2])
+    # target_output = np.array([1, 0, 0])
+
+    # print(f"binary_cross_entropy: {binary_cross_entropy(target_output, softmax_output)}")
+    # print(f"categorical_cross_entropy: {categorical_cross_entropy(target_output, softmax_output)}")
