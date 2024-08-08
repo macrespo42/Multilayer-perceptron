@@ -1,7 +1,7 @@
 """Multilayer perceptron model."""
 
 import numpy as np
-from algorithm import sigmoid, softmax
+from algorithm import rlu, sigmoid, softmax
 
 # For testing purpose to remove
 from nnfs.datasets import spiral_data
@@ -30,6 +30,8 @@ class DenseLayer:
                 activate_output = sigmoid(self.output)
             elif self.activation == "softmax":
                 activate_output = softmax(self.output)
+            elif self.activation == "rlu":
+                activate_output = rlu(self.output)
             else:
                 raise NotImplementedError(f"{self.activation} activation function is not implemented.")
         return activate_output
