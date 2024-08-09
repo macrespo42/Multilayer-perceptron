@@ -1,9 +1,3 @@
-"""Multilayer perceptron model."""
-
-import numpy as np
-from . import algorithm
-
-
 class DenseLayer:
     """Layer of a mlp."""
 
@@ -14,7 +8,7 @@ class DenseLayer:
         self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
         self.bias = np.zeros((1, self.n_neurons))
 
-        ACTIVATION = {"sigmoid": algorithm.sigmoid, "softmax": algorithm.softmax, "rlu": algorithm.rlu}
+        ACTIVATION = {"sigmoid": sigmoid, "softmax": softmax, "rlu": rlu}
 
         self.activation = ACTIVATION.get(activation, None)
         if self.activation is None:
@@ -36,22 +30,3 @@ class DenseLayer:
             self.output = self.activation(self.output)
         else:
             print("WARNING: Forward layer before activate it")
-
-
-class MultilayerPerceptron:
-    """Multilayer perceptron model."""
-
-    def __init__(self, network: list[DenseLayer]) -> None:
-        """MLP constructor."""
-        self.network = network
-
-    def forward(self, inputs):
-        """FeedForward in mlp."""
-        if len(self.network) <= 0:
-            return None
-        for layer in self.network:
-            layer.forward(inputs)
-            layer.activate()
-            inputs = layer.output
-        output_layer = self.network[-1]
-        self.output = output_layer.output

@@ -304,6 +304,20 @@ python-dateutil = ">=2.7"
 dev = ["meson-python (>=0.13.1)", "numpy (>=1.25)", "pybind11 (>=2.6)", "setuptools (>=64)", "setuptools_scm (>=7)"]
 
 [[package]]
+name = "nnfs"
+version = "0.5.1"
+description = "Package related to the Neural Networks from Scratch in Python book"
+optional = false
+python-versions = ">=3"
+files = [
+    {file = "nnfs-0.5.1-py3-none-any.whl", hash = "sha256:fd04796da8e8f40a4dff9ad995a99944b8f0d68966d59e3e5d133659c7264c1f"},
+    {file = "nnfs-0.5.1.tar.gz", hash = "sha256:7e1ba80bdfb89d9909758ba7546f1f73c5f6b58c1d5899649ac488c2a4833213"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[[package]]
 name = "numpy"
 version = "2.0.1"
 description = "Fundamental package for array computing in Python"
@@ -629,4 +643,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "656e59229065df876ceafd165cfcb1ffc0fce7a682aba089781060f94a55b213"
+content-hash = "da4fb52a287279d3725b2a6e7e2a4db458d3d80b5f289262aa502e60e95237ff"

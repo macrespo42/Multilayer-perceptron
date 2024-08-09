@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 
-def encode_categorical_variables(column: pd.Series, a: str, b: str) -> pd.Series:
+def encode_categorical_variables(column, a: str, b: str) -> pd.Series:
     """Encode categorical variables numerics equivalent 1 and 0.
 
     encode_categorical_variables(column: pd.Series, a: str, b: str) -> pd.Series
@@ -12,14 +12,14 @@ def encode_categorical_variables(column: pd.Series, a: str, b: str) -> pd.Series
     return column.map({a: 1, b: 0})
 
 
-def standardize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
+def standardize(df, columns) -> pd.DataFrame:
     """Standardize given column of a dataset using z-score.
 
     standardize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """
     for column in columns:
         x = df[column]
-        df[column] = (x - x.mean()) / x.std()
+        df.loc[:, column] = (x - x.mean()) / x.std()
     return df
 
 
@@ -30,5 +30,5 @@ def normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """
     for column in columns:
         x = df[column]
-        df[column] = (x - x.min()) / (x - x.max())
+        df.loc[:, column] = (x - x.min()) / (x - x.max())
     return df

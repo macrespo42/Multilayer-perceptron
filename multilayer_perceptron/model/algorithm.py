@@ -18,7 +18,7 @@ def softmax(z: np.ndarray) -> np.ndarray:
     softmax(z: np.ndarray) -> np.ndarray:
     """
     exp_z = np.exp(z)
-    return exp_z / np.sum(exp_z)
+    return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 
 
 def rlu(z: np.ndarray) -> np.ndarray:
@@ -35,7 +35,7 @@ def binary_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]:
 
     binary_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]
     """
-    return np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
+    return np.mean(y * np.log(p) + (1 - y) * np.log(1 - p), axis=1)
 
 
 def categorical_cross_entropy(y: np.ndarray, p: np.ndarray) -> np.floating[Any]:
