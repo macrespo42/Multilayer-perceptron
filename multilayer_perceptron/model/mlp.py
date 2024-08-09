@@ -16,7 +16,12 @@ class DenseLayer:
 
         self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
         self.bias = np.zeros((1, self.n_neurons))
-        self.activation = activation
+
+        ACTIVATION = {"sigmoid": sigmoid, "softmax": softmax, "rlu": rlu}
+
+        self.activation = ACTIVATION.get(activation, None)
+        if self.activation is None:
+            raise NotImplementedError(f"{self.activation} activation function is not implemented.")
 
     def forward(self, inputs) -> None:
         """Output of the perceptron.
@@ -25,28 +30,30 @@ class DenseLayer:
         """
         self.output = np.dot(inputs, self.weights) + self.bias
 
-    def activate(self) -> np.ndarray | None:
+    def activate(self):
         """Apply activation function to the neurons output.
 
-        activate(self) -> np.ndarray | None
+        activate(self)
         """
-        activate_output = None
         if self.output is not None:
-            if self.activation == "sigmoid":
-                activate_output = sigmoid(self.output)
-            elif self.activation == "softmax":
-                activate_output = softmax(self.output)
-            elif self.activation == "rlu":
-                activate_output = rlu(self.output)
-            else:
-                raise NotImplementedError(f"{self.activation} activation function is not implemented.")
-        return activate_output
+            self.output = self.activation(self.output)
+        else:
+            print("WARNING: Forward layer before activate it")
 
 
 class MultilayerPerceptron:
     """Multilayer perceptron model."""
 
-    pass
+    def __init__(self, network) -> None:
+        """MLP constructor."""
+        self.network = network
+
+    def forward(self, inputs):
+        """FeedForward in mlp."""
+        for layer in self.network:
+            layer.forward(inputs)
+            layer.activate()
+            inputs = layer.output
 
 
 if __name__ == "__main__":
@@ -60,13 +67,6 @@ if __name__ == "__main__":
 
     layer1.forward(X)
     layer2.forward(layer1.activate())
-
-    output = layer2.activate()
-    if output is not None:
-        print(output[:5])
-        predictions = np.argmax(output, axis=1)
-        accuracy = np.mean(predictions == y)
-        print(f"Accuracy: {accuracy}")
 
     # softmax_output = np.array([0.7, 0.1, 0.2])
     # target_output = np.array([1, 0, 0])
