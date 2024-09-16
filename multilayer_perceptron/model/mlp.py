@@ -1,6 +1,7 @@
 """Multilayer perceptron model."""
 
 import numpy as np
+
 from . import algorithm
 
 

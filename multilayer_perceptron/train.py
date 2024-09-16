@@ -1,12 +1,8 @@
 """Training program for the mlp model."""
 
 import numpy as np
-from data_engineering import parse
-from data_engineering import data_preparation
+from data_engineering import data_preparation, parse
 from model import mlp
-
-import nnfs
-from nnfs.datasets import spiral_data
 
 
 def model_42():
@@ -88,21 +84,4 @@ class Loss_CategoricalCrossentropy(Loss):
 
 if __name__ == "__main__":
     # Multiclassifier scenario
-    nnfs.init()
-
-    X, y = spiral_data(samples=100, classes=3)
-
-    dense1 = mlp.DenseLayer(2, 3, activation="rlu")
-    dense2 = mlp.DenseLayer(3, 3, activation="softmax")
-
-    loss_function = Loss_CategoricalCrossentropy()
-
-    model = mlp.MultilayerPerceptron([dense1, dense2])
-    model.forward(X)
-    loss = loss_function.calculate(model.output, y)
-
-    predictions = np.argmax(model.output, axis=1)
-    accuracy = np.mean(predictions == y)
-    print(model.output[:5])
-    print(f"Loss: {loss}")
-    print(f"Accuracy: {accuracy}")
+    model_42()
