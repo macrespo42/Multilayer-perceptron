@@ -21,13 +21,6 @@ class DenseLayer:
         if self.activation is None:
             raise NotImplementedError(f"{self.activation} activation function is not implemented.")
 
-    def forward(self, inputs) -> None:
-        """Output of the perceptron.
-
-        forward(self, inputs) -> Any
-        """
-        self.output = np.dot(inputs, self.weights) + self.bias
-
     def activate(self):
         """Apply activation function to the neurons output.
 
@@ -38,21 +31,58 @@ class DenseLayer:
         else:
             print("WARNING: Forward layer before activate it")
 
+    def forward_propagation(self, inputs) -> None:
+        """Output of the perceptron.
+
+        forward(self, inputs) -> Any
+        """
+        self.output = np.dot(inputs, self.weights) + self.bias
+        self.output = self.activate()
+
+    def __back_propagation(self, X, y):
+        """Compute derivative of Weights and bias.
+
+        __back_propagation(self, X, y)
+        """
+        dw = 1 / len(y) * np.dot(X.T, self.output - y)
+        db = 1 / len(y) * np.sum(self.output - y, keepdims=True)
+        return (dw, db)
+
+    def update(self, X, y, learning_rate) -> None:
+        """Update weight and bias based on they derivative.
+
+        update(self, X, Y, learning_rate) -> None
+        """
+        dw, db = self.__back_propagation(X, y)
+        self.weights = self.weights - learning_rate * dw
+        self.bias = self.bias - learning_rate * db
+
 
 class MultilayerPerceptron:
     """Multilayer perceptron model."""
 
-    def __init__(self, network: list[DenseLayer]) -> None:
+    def __init__(self, network: list[DenseLayer], learning_rate=0.314, epochs=84) -> None:
         """MLP constructor."""
         self.network = network
+        self.learning_rate = learning_rate
+        self.epochs = epochs
 
     def forward(self, inputs):
         """FeedForward in mlp."""
         if len(self.network) <= 0:
             return None
         for layer in self.network:
-            layer.forward(inputs)
+            layer.forward_propagation(inputs)
             layer.activate()
             inputs = layer.output
         output_layer = self.network[-1]
         self.output = output_layer.output
+
+    def backward(self, X, y):
+        """Backward propagation of all layers."""
+        if len(self.network) <= 0:
+            return None
+        for _ in range(self.epochs):
+            for layer in self.network:
+                layer.update(X, y, self.learning_rate)
+                self.forward(X)
