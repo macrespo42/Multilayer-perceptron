@@ -37,25 +37,7 @@ class DenseLayer:
         forward(self, inputs) -> Any
         """
         self.output = np.dot(inputs, self.weights) + self.bias
-        self.output = self.activate()
-
-    def __back_propagation(self, X, y):
-        """Compute derivative of Weights and bias.
-
-        __back_propagation(self, X, y)
-        """
-        dw = 1 / len(y) * np.dot(X.T, self.output - y)
-        db = 1 / len(y) * np.sum(self.output - y, keepdims=True)
-        return (dw, db)
-
-    def update(self, X, y, learning_rate) -> None:
-        """Update weight and bias based on they derivative.
-
-        update(self, X, Y, learning_rate) -> None
-        """
-        dw, db = self.__back_propagation(X, y)
-        self.weights = self.weights - learning_rate * dw
-        self.bias = self.bias - learning_rate * db
+        self.activate()
 
 
 class MultilayerPerceptron:
@@ -77,12 +59,3 @@ class MultilayerPerceptron:
             inputs = layer.output
         output_layer = self.network[-1]
         self.output = output_layer.output
-
-    def backward(self, X, y):
-        """Backward propagation of all layers."""
-        if len(self.network) <= 0:
-            return None
-        for _ in range(self.epochs):
-            for layer in self.network:
-                layer.update(X, y, self.learning_rate)
-                self.forward(X)
