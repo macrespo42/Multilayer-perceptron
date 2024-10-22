@@ -1,6 +1,7 @@
 """Collection of algorithm used by machine learning models."""
 
 from typing import Any
+
 import numpy as np
 
 
