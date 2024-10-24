@@ -1,8 +1,7 @@
 """Multilayer perceptron model."""
 
-from os import walk
-
 import numpy as np
+from tqdm import tqdm
 
 from . import algorithm
 
@@ -47,7 +46,9 @@ class DenseLayer:
 class MultilayerPerceptron:
     """Multilayer perceptron model."""
 
-    def __init__(self, X: np.ndarray, y: np.ndarray, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
+    def __init__(
+        self, X: np.ndarray, y: np.ndarray, network: list[DenseLayer], learning_rate=0.1, epochs=10_000
+    ) -> None:
         """MLP constructor."""
         self.X = X
         self.y = y
@@ -75,22 +76,34 @@ class MultilayerPerceptron:
         backward(self, inputs: np.ndarray) -> None
         """
         m = len(self.y)
-        C = len(self.network) // 2
-        print(f"C: {C} | OR: {len(self.network)}")
-        breakpoint()
+        dZ = self.network[-1].output - self.y
+        for i in reversed(range(len(self.network))):
+            layer = self.network[i]
+            prev_layer = self.network[i - 1] if i > 0 else self.X
 
-        dZ = self.network[C].output - self.y
-        for c in reversed(range(1, C + 1)):
-            self.network[c].dw = 1 / m * np.dot(dZ, self.network[c].output.T)
-            self.network[c].db = 1 / m * np.sum(dZ, axis=1, keepdims=True)
-            if c > 1:
-                dZ = np.dot(self.network[c].weights.T, dZ) * self.network[c - 1].output * (1 - self.network[c - 1])
+            prev_output = prev_layer.output if i > 0 else prev_layer
+
+            layer.dw = 1 / m * np.dot(prev_output.T, dZ)
+            layer.db = 1 / m * np.sum(dZ, axis=0, keepdims=True)
+            if i > 0:
+                dZ = np.dot(dZ, layer.weights.T) * prev_output * (1 - prev_output)
 
     def update(self) -> None:
         """Update weights and bias for each layers.
 
         update(self) -> None
         """
-        C = len(self.network) // 2
-        for c in range(1, C + 1):
-            pass
+        for layer in self.network:
+            layer.weights = layer.weights - self.learning_rate * layer.dw
+            layer.bias = layer.bias - self.learning_rate * layer.db
+
+    def fit(self) -> None:
+        """Fit the model with givens X and y.
+
+        fit(self) -> None
+        """
+        for _ in tqdm(range(self.epochs)):
+            self.forward()
+            self.backward()
+            self.update()
+        print("training done!")

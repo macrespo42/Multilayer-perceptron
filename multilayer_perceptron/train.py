@@ -49,10 +49,8 @@ def model_42():
     ]
 
     model = mlp.MultilayerPerceptron(X_norm, y_norm, network)
-    model.forward()
-    print(model.output)
-    model.backward()
-    print(model.output)
+    model.fit()
+    # print(model.output)
 
 
 class Loss:
