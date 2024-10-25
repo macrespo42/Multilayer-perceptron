@@ -3,6 +3,7 @@
 import numpy as np
 from data_engineering import data_preparation, parse
 from model import mlp
+from sklearn.metrics import accuracy_score
 
 
 def model_42():
@@ -42,15 +43,16 @@ def model_42():
     y_norm = data_preparation.encode_categorical_variables(y, "B", "M")
 
     network = [
-        mlp.DenseLayer(24, 3, activation="rlu"),
-        mlp.DenseLayer(3, 3, activation="rlu"),
-        mlp.DenseLayer(3, 3, activation="rlu"),
-        mlp.DenseLayer(3, 2, activation="softmax"),
+        mlp.DenseLayer(24, 16, activation="rlu"),
+        mlp.DenseLayer(16, 32, activation="rlu"),
+        mlp.DenseLayer(32, 16, activation="rlu"),
+        mlp.DenseLayer(16, 2, activation="softmax"),
     ]
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network)
+    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=5_000)
     model.fit()
-    # print(model.output)
+    y_pred = model.predict(X_norm).argmax(axis=1)
+    print(accuracy_score(y_norm.argmax(axis=1), y_pred))
 
 
 class Loss:

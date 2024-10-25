@@ -11,8 +11,8 @@ python = "^3.10"
 numpy = "^2.0.1"
 pandas = "^2.2.2"
 matplotlib = "^3.9.1"
-nnfs = "^0.5.1"
 tqdm = "^4.66.5"
+scikit-learn = "^1.5.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.5.5"

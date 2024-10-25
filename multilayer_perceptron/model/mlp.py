@@ -11,6 +11,7 @@ class DenseLayer:
 
     def __init__(self, n_inputs, n_neurons, activation="sigmoid") -> None:
         """Layer constructor."""
+        np.random.seed(1)
         self.n_neurons = n_neurons
 
         self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
@@ -46,15 +47,15 @@ class DenseLayer:
 class MultilayerPerceptron:
     """Multilayer perceptron model."""
 
-    def __init__(
-        self, X: np.ndarray, y: np.ndarray, network: list[DenseLayer], learning_rate=0.1, epochs=10_000
-    ) -> None:
+    def __init__(self, X: np.ndarray, y: np.ndarray, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
         """MLP constructor."""
+        np.random.seed(1)
         self.X = X
         self.y = y
         self.network = network
         self.learning_rate = learning_rate
         self.epochs = epochs
+        self.output = None
 
     def forward(self) -> None:
         """FeedForward in mlp.
@@ -106,4 +107,8 @@ class MultilayerPerceptron:
             self.forward()
             self.backward()
             self.update()
-        print("training done!")
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        """Predict output."""
+        self.forward()
+        return np.array(self.network[-1].output)
