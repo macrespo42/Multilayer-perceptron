@@ -39,7 +39,7 @@ def model_42():
 
     X, y = (breast_cancer_data[feature_names], breast_cancer_data["diagnosis"])
 
-    X_norm = data_preparation.standardize(X, X.columns)
+    X_norm = data_preparation.normalize(X, X.columns)
     y_norm = data_preparation.encode_categorical_variables(y, "B", "M")
 
     network = [
@@ -49,10 +49,10 @@ def model_42():
         mlp.DenseLayer(16, 2, activation="softmax"),
     ]
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=5_000)
+    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=50_000)
     model.fit()
     y_pred = model.predict(X_norm).argmax(axis=1)
-    print(accuracy_score(y_norm.argmax(axis=1), y_pred))
+    print(f"ACCURRACY: { accuracy_score(y_norm.argmax(axis=1), y_pred) }")
 
 
 class Loss:
@@ -84,5 +84,4 @@ class Loss_CategoricalCrossentropy(Loss):
 
 
 if __name__ == "__main__":
-    # Multiclassifier scenario
     model_42()

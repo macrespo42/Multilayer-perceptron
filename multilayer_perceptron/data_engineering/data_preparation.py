@@ -28,7 +28,5 @@ def normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
 
     normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """
-    for column in columns:
-        x = df[column]
-        df.loc[:, column] = (x - x.min()) / (x - x.max())
-    return df
+    df_norm = (df-df.min())/(df.max()-df.min())
+    return df_norm
