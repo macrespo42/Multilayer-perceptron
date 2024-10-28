@@ -52,10 +52,10 @@ def train():
 
     model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=10, learning_rate=0.1)
     model.fit()
-    y_pred = model.predict(X_norm).argmax(axis=1)
-    print(f"ACCURRACY: { accuracy_score(y_norm.argmax(axis=1), y_pred) }")
+    y_pred = model.predict(X_norm)
+    print(f"ACCURRACY: { accuracy_score(y_norm.argmax(axis=1), y_pred.argmax(axis=1)) }")
     print(f"LOSS: {log_loss(y_norm.argmax(axis=1), y_pred)}")
-    # print(f"MY LOSS: {binary_cross_entropy(y_norm.argmax(axis=1), y_pred)}")
+    print(f"MY LOSS: {binary_cross_entropy(y_norm.argmax(axis=1), y_pred[:, 0])}")
 
 if __name__ == "__main__":
     train()
