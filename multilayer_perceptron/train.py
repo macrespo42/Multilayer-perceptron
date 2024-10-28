@@ -5,6 +5,7 @@ from data_engineering import data_preparation, parse
 from model import mlp
 from model.metrics import accuracy_score
 from sklearn.metrics import log_loss
+from model.algorithm import binary_cross_entropy
 
 def train():
     """Placeholder."""
@@ -49,11 +50,12 @@ def train():
         mlp.DenseLayer(24, 2, activation="softmax"),
     ]
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=10_000, learning_rate=0.1)
+    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=10, learning_rate=0.1)
     model.fit()
     y_pred = model.predict(X_norm).argmax(axis=1)
     print(f"ACCURRACY: { accuracy_score(y_norm.argmax(axis=1), y_pred) }")
     print(f"LOSS: {log_loss(y_norm.argmax(axis=1), y_pred)}")
+    # print(f"MY LOSS: {binary_cross_entropy(y_norm.argmax(axis=1), y_pred)}")
 
 if __name__ == "__main__":
     train()
