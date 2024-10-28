@@ -2,9 +2,11 @@
 
 import numpy as np
 from tqdm import tqdm
+from . import metrics
+import matplotlib.pyplot as plt
+from sklearn.metrics import log_loss
 
 from . import algorithm
-
 
 class DenseLayer:
     """Layer of a mlp."""
@@ -103,10 +105,28 @@ class MultilayerPerceptron:
 
         fit(self) -> None
         """
+        accuracies = []
+        losses = []
         for _ in tqdm(range(self.epochs)):
             self.forward()
+            accuracies.append(metrics.accuracy_score(self.y.argmax(axis=1), self.network[-1].output.argmax(axis=1)))
+            losses.append(log_loss(self.y.argmax(axis=1), self.network[-1].output.argmax(axis=1)))
             self.backward()
             self.update()
+
+        print(np.min(losses))
+        plt.figure(figsize=(12, 4))
+        plt.subplot(1, 2, 1)
+        plt.plot(losses, label='training loss')
+        plt.xlabel("Epochs")
+        plt.ylabel("Loss")
+        plt.legend()
+        plt.subplot(1, 2, 2)
+        plt.plot(accuracies, label='training acc')
+        plt.ylabel("Accuracy (%)")
+        plt.xlabel("Epochs")
+        plt.legend()
+        plt.show()
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """Predict output."""
