@@ -2,7 +2,6 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from tqdm import tqdm
 
 from . import algorithm, metrics
 
@@ -107,18 +106,21 @@ class MultilayerPerceptron:
         """
         accuracies = {"train": [], "test": []}
         losses = {"train": [], "test": []}
-        for _ in tqdm(range(self.epochs)):
+        for i in range(self.epochs):
             self.forward(self.X)
             accuracies["train"].append(
                 metrics.accuracy_score(self.y.argmax(axis=1), self.network[-1].output.argmax(axis=1))
             )
-            losses["train"].append(metrics.binary_cross_entropy(self.y.argmax(axis=1), self.network[-1].output[:, 1]))
+            loss = metrics.binary_cross_entropy(self.y.argmax(axis=1), self.network[-1].output[:, 1])
+            losses["train"].append(loss)
             self.backward()
             self.update()
 
             y_pred = self.predict(X_test)
             accuracies["test"].append(metrics.accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1)))
-            losses["test"].append(metrics.binary_cross_entropy(y_test.argmax(axis=1), y_pred[:, 1]))
+            train_loss = metrics.binary_cross_entropy(y_test.argmax(axis=1), y_pred[:, 1])
+            losses["test"].append(train_loss)
+            print(f"Epochs {i}/{self.epochs} - loss: {loss} - val_loss: {train_loss}")
 
         print(f"Min loss train: {np.min(losses["train"])}")
         print(f"Min loss test: {np.min(losses["test"])}")
