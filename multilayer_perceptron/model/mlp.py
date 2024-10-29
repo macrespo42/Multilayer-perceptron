@@ -32,7 +32,7 @@ class DenseLayer:
         activate(self)
         """
         if self.output is not None:
-            self.output = self.activation(self.output)
+            return self.activation(self.output)
         else:
             print("WARNING: Forward layer before activate it")
 
@@ -42,7 +42,8 @@ class DenseLayer:
         forward(self, inputs) -> Any
         """
         self.output = np.dot(inputs, self.weights) + self.bias
-        self.activate()
+        self.output = self.activate()
+        return self.output
 
 
 class MultilayerPerceptron:
@@ -58,14 +59,14 @@ class MultilayerPerceptron:
         self.epochs = epochs
         self.output = None
 
-    def forward(self) -> None:
+    def forward(self, X) -> None:
         """FeedForward in mlp.
 
         forward(self, inputs: np.ndarray) -> None
         """
         if len(self.network) <= 0:
             return None
-        inputs = self.X
+        inputs = X
         for layer in self.network:
             layer.forward_propagation(inputs)
             inputs = layer.output
@@ -99,7 +100,7 @@ class MultilayerPerceptron:
             layer.weights = layer.weights - self.learning_rate * layer.dw
             layer.bias = layer.bias - self.learning_rate * layer.db
 
-    def fit(self) -> None:
+    def fit(self, X_test, y_test) -> None:
         """Fit the model with givens X and y.
 
         fit(self) -> None
@@ -107,7 +108,7 @@ class MultilayerPerceptron:
         accuracies = {"train": [], "test": []}
         losses = {"train": [], "test": []}
         for _ in tqdm(range(self.epochs)):
-            self.forward()
+            self.forward(self.X)
             accuracies["train"].append(
                 metrics.accuracy_score(self.y.argmax(axis=1), self.network[-1].output.argmax(axis=1))
             )
@@ -115,15 +116,22 @@ class MultilayerPerceptron:
             self.backward()
             self.update()
 
-        print(np.min(losses["train"]))
+            y_pred = self.predict(X_test)
+            accuracies["test"].append(metrics.accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1)))
+            losses["test"].append(metrics.binary_cross_entropy(y_test.argmax(axis=1), y_pred[:, 1]))
+
+        print(f"Min loss train: {np.min(losses["train"])}")
+        print(f"Min loss test: {np.min(losses["test"])}")
         plt.figure(figsize=(12, 4))
         plt.subplot(1, 2, 1)
         plt.plot(losses["train"], label="training loss")
+        plt.plot(losses["test"], label="test loss", linestyle="--")
         plt.xlabel("Epochs")
         plt.ylabel("Loss")
         plt.legend()
         plt.subplot(1, 2, 2)
-        plt.plot(accuracies["train"], label="training acc")
+        plt.plot(accuracies["train"], label="train acc")
+        plt.plot(accuracies["test"], label="test acc")
         plt.ylabel("Accuracy (%)")
         plt.xlabel("Epochs")
         plt.legend()
@@ -131,5 +139,9 @@ class MultilayerPerceptron:
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """Predict output."""
-        self.forward()
-        return np.array(self.network[-1].output)
+        if len(self.network) <= 0:
+            return None
+        inputs = X
+        for layer in self.network:
+            inputs = layer.forward_propagation(inputs)
+        return np.array(inputs)

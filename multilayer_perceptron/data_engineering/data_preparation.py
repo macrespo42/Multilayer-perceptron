@@ -23,10 +23,10 @@ def standardize(df, columns) -> pd.DataFrame:
     return df
 
 
-def normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
+def normalize(df: pd.DataFrame) -> pd.DataFrame:
     """Normalize given column of a dataframe using min-max.
 
     normalize(df: pd.DataFrame, columns: np.ndarray) -> pd.DataFrame:
     """
-    df_norm = (df-df.min())/(df.max()-df.min())
+    df_norm = (df - df.min()) / (df.max() - df.min())
     return df_norm
