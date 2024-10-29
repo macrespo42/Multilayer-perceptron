@@ -51,10 +51,11 @@ def train():
         mlp.DenseLayer(24, 24, activation="rlu"),
         mlp.DenseLayer(24, 24, activation="rlu"),
         mlp.DenseLayer(24, 24, activation="rlu"),
+        mlp.DenseLayer(24, 24, activation="rlu"),
         mlp.DenseLayer(24, 2, activation="softmax"),
     ]
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=10_000, learning_rate=0.1)
+    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=7_000, learning_rate=0.1)
     model.fit(X_test, y_test)
     y_pred = model.predict(X_test)
     print(f"ACCURRACY: { accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1)) }")

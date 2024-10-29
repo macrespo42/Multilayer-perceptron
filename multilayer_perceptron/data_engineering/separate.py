@@ -6,8 +6,8 @@ import sys
 from parse import read_csv_with_WDBC_headers
 
 
-def separate(path: str, name="data", train_percentage=80) -> None:
-    """Separate given csv into 2 file: data_train (first 80% of data) and data_test (last 20%).
+def separate(path: str, name="data", train_percentage=70) -> None:
+    """Separate given csv into 2 file: data_train (first 70% of data) and data_test (last 30%).
 
     separate(path: str, name="data") -> None
     """
