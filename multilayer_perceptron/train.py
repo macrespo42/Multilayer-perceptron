@@ -1,15 +1,14 @@
 """Training program for the mlp model."""
 
-import numpy as np
-from data_engineering import data_preparation, parse
+import pandas as pd
+from data_engineering import data_preparation
 from model import mlp
-from model.metrics import accuracy_score
-from sklearn.metrics import log_loss
-from model.algorithm import binary_cross_entropy
+from model.metrics import accuracy_score, binary_cross_entropy
+
 
 def train():
     """Placeholder."""
-    breast_cancer_data = parse.read_csv_with_WDBC_headers("datasets/data.csv")
+    breast_cancer_data_train = pd.read_csv("datasets/data_train.csv")
 
     feature_names = [
         "radius_mean",
@@ -38,7 +37,7 @@ def train():
         "concave points_worst",
     ]
 
-    X, y = (breast_cancer_data[feature_names], breast_cancer_data["diagnosis"])
+    X, y = (breast_cancer_data_train[feature_names], breast_cancer_data_train["diagnosis"])
 
     X_norm = data_preparation.normalize(X, X.columns)
     y_norm = data_preparation.encode_categorical_variables(y, "B", "M")
@@ -50,12 +49,12 @@ def train():
         mlp.DenseLayer(24, 2, activation="softmax"),
     ]
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=10, learning_rate=0.1)
+    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=10_000, learning_rate=0.1)
     model.fit()
     y_pred = model.predict(X_norm)
     print(f"ACCURRACY: { accuracy_score(y_norm.argmax(axis=1), y_pred.argmax(axis=1)) }")
-    print(f"LOSS: {log_loss(y_norm.argmax(axis=1), y_pred)}")
-    print(f"MY LOSS: {binary_cross_entropy(y_norm.argmax(axis=1), y_pred[:, 0])}")
+    print(f"MY LOSS: {binary_cross_entropy(y_norm.argmax(axis=1), y_pred[:, 1])}")
+
 
 if __name__ == "__main__":
     train()
