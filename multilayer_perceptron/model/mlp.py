@@ -5,13 +5,14 @@ import numpy as np
 
 from . import algorithm, metrics
 
+SEED = 3
 
 class DenseLayer:
     """Layer of a mlp."""
 
     def __init__(self, n_inputs, n_neurons, activation="sigmoid") -> None:
         """Layer constructor."""
-        np.random.seed(1)
+        np.random.seed(SEED)
         self.n_neurons = n_neurons
 
         self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
@@ -50,7 +51,7 @@ class MultilayerPerceptron:
 
     def __init__(self, X: np.ndarray, y: np.ndarray, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
         """MLP constructor."""
-        np.random.seed(1)
+        np.random.seed(SEED)
         self.X = X
         self.y = y
         self.network = network
@@ -122,8 +123,6 @@ class MultilayerPerceptron:
             losses["test"].append(train_loss)
             print(f"Epochs {i}/{self.epochs} - loss: {loss} - val_loss: {train_loss}")
 
-        print(f"Min loss train: {np.min(losses["train"])}")
-        print(f"Min loss test: {np.min(losses["test"])}")
         plt.figure(figsize=(12, 4))
         plt.subplot(1, 2, 1)
         plt.plot(losses["train"], label="training loss")
