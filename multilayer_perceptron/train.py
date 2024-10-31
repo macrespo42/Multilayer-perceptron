@@ -1,15 +1,37 @@
 """Training program for the mlp model."""
 
+import argparse
+
 import pandas as pd
 from data_engineering import data_preparation
 from model import mlp
 from model.metrics import accuracy_score, binary_cross_entropy
 
 
+def list_of_ints(arg):
+    """Parse a list of ints from stdin."""
+    return list(map(int, arg.split(",")))
+
+
 def train():
     """Placeholder."""
-    breast_cancer_data_train = pd.read_csv("datasets/data_train.csv")
-    breast_cancer_data_test = pd.read_csv("datasets/data_test.csv")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("data_train", help="path to the training dataset", type=str)
+    parser.add_argument("data_test", help="path to the test dataset", type=str)
+    parser.add_argument("--epochs", help="number of iteration the model as to train", type=int)
+    parser.add_argument("--learning_rate", help="which speed the model as to learn", type=float)
+    parser.add_argument("--layer", help="Number of neurons for each hidden layers", type=list_of_ints)
+    args = parser.parse_args()
+
+    breast_cancer_data_train = None
+    breast_cancer_data_test = None
+
+    try:
+        breast_cancer_data_train = pd.read_csv(args.data_train)
+        breast_cancer_data_test = pd.read_csv(args.data_test)
+    except Exception:
+        print("Can't find dataset")
+        exit(1)
 
     feature_names = [
         "radius_mean",
@@ -47,15 +69,32 @@ def train():
     X_test = data_preparation.normalize(X_test)
     y_test = data_preparation.encode_categorical_variables(y_test, "B", "M")
 
-    network = [
-        mlp.DenseLayer(24, 24, activation="rlu"),
-        mlp.DenseLayer(24, 24, activation="rlu"),
-        mlp.DenseLayer(24, 24, activation="rlu"),
-        mlp.DenseLayer(24, 24, activation="rlu"),
-        mlp.DenseLayer(24, 2, activation="softmax"),
-    ]
+    input_shape = len(X_norm.columns)
+    output_shape = 2
+    network = []
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=6_500, learning_rate=0.1)
+    if args.layer is not None:
+        network.append(mlp.DenseLayer(input_shape, input_shape, activation="rlu"))
+        prev_shape = input_shape
+        for i in range(len(args.layer)):
+            network.append(mlp.DenseLayer(prev_shape, args.layer[i], activation="rlu"))
+            prev_shape = args.layer[i]
+        network.append(
+            mlp.DenseLayer(prev_shape, output_shape, activation="softmax"),
+        )
+    else:
+        network = [
+            mlp.DenseLayer(input_shape, input_shape, activation="rlu"),
+            mlp.DenseLayer(24, 24, activation="rlu"),
+            mlp.DenseLayer(24, 24, activation="rlu"),
+            mlp.DenseLayer(24, 24, activation="rlu"),
+            mlp.DenseLayer(24, output_shape, activation="softmax"),
+        ]
+
+    epochs = 6_500 if not args.epochs else args.epochs
+    learning_rate = 0.1 if not args.learning_rate else args.learning_rate
+
+    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=epochs, learning_rate=learning_rate)
     model.fit(X_test, y_test)
     y_pred = model.predict(X_test)
     print(f"ACCURRACY: { accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1)) }")
