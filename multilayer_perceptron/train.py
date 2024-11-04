@@ -5,7 +5,6 @@ import argparse
 import pandas as pd
 from data_engineering import data_preparation
 from model import mlp
-from model.metrics import accuracy_score, binary_cross_entropy
 
 
 def list_of_ints(arg):
