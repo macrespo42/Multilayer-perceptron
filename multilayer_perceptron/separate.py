@@ -3,7 +3,7 @@
 import math
 import sys
 
-from parse import read_csv_with_WDBC_headers
+from data_engineering.parse import read_csv_with_WDBC_headers
 
 
 def separate(path: str, name="data", train_percentage=70) -> None:

@@ -94,11 +94,9 @@ def train():
     epochs = 6_500 if not args.epochs else args.epochs
     learning_rate = 0.1 if not args.learning_rate else args.learning_rate
 
-    model = mlp.MultilayerPerceptron(X_norm, y_norm, network, epochs=epochs, learning_rate=learning_rate)
-    model.fit(X_test, y_test)
-    y_pred = model.predict(X_test)
-    print(f"ACCURRACY: { accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1)) }")
-    print(f"MY LOSS: {binary_cross_entropy(y_test.argmax(axis=1), y_pred[:, 1])}")
+    model = mlp.MultilayerPerceptron(network, epochs=epochs, learning_rate=learning_rate)
+    model.fit(X_norm, y_norm, X_test, y_test)
+    model.save()
 
 
 if __name__ == "__main__":

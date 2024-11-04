@@ -1,5 +1,7 @@
 """Multilayer perceptron model."""
 
+import pickle
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,16 +9,23 @@ from . import algorithm, metrics
 
 SEED = 3
 
+
 class DenseLayer:
     """Layer of a mlp."""
 
-    def __init__(self, n_inputs, n_neurons, activation="sigmoid") -> None:
+    def __init__(self, n_inputs, n_neurons, activation="sigmoid", weights=None, bias=None) -> None:
         """Layer constructor."""
         np.random.seed(SEED)
         self.n_neurons = n_neurons
 
-        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
-        self.bias = np.zeros((1, self.n_neurons))
+        if weights is None:
+            self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+        else:
+            self.weights = weights
+        if bias is None:
+            self.bias = np.zeros((1, self.n_neurons))
+        else:
+            self.bias = bias
         self.dw = None
         self.db = None
 
@@ -49,11 +58,9 @@ class DenseLayer:
 class MultilayerPerceptron:
     """Multilayer perceptron model."""
 
-    def __init__(self, X: np.ndarray, y: np.ndarray, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
+    def __init__(self, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
         """MLP constructor."""
         np.random.seed(SEED)
-        self.X = X
-        self.y = y
         self.network = network
         self.learning_rate = learning_rate
         self.epochs = epochs
@@ -100,11 +107,13 @@ class MultilayerPerceptron:
             layer.weights = layer.weights - self.learning_rate * layer.dw
             layer.bias = layer.bias - self.learning_rate * layer.db
 
-    def fit(self, X_test, y_test) -> None:
+    def fit(self, X: np.ndarray, y: np.ndarray, X_test, y_test) -> None:
         """Fit the model with givens X and y.
 
         fit(self) -> None
         """
+        self.X = X
+        self.y = y
         accuracies = {"train": [], "test": []}
         losses = {"train": [], "test": []}
         for i in range(self.epochs):
@@ -146,3 +155,11 @@ class MultilayerPerceptron:
         for layer in self.network:
             inputs = layer.forward_propagation(inputs)
         return np.array(inputs)
+
+    def save(self, path="model.npy") -> None:
+        """Save current model as npy file."""
+        if len(self.network) <= 0:
+            return
+        with open(path, "wb") as model:
+            pickle.dump(self, model)
+        print(f"model saved at {path}")
