@@ -70,7 +70,7 @@ def predict():
 
     y_pred = model.predict(X_test)
     print(f"ACCURRACY: { accuracy_score(y_test.argmax(axis=1), y_pred.argmax(axis=1)) }")
-    print(f"MY LOSS: {binary_cross_entropy(y_test.argmax(axis=1), y_pred[:, 1])}")
+    print(f"LOSS (Binary cross entropy): {binary_cross_entropy(y_test.argmax(axis=1), y_pred[:, 1])}")
 
 
 if __name__ == "__main__":
