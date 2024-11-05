@@ -13,19 +13,16 @@ SEED = 3
 class DenseLayer:
     """Layer of a mlp."""
 
-    def __init__(self, n_inputs, n_neurons, activation="sigmoid", weights=None, bias=None) -> None:
-        """Layer constructor."""
+    def __init__(self, n_inputs, n_neurons, activation="sigmoid") -> None:
+        """Layer constructor.
+
+        def __init__(self, n_inputs, n_neurons, activation="sigmoid") -> None
+        """
         np.random.seed(SEED)
         self.n_neurons = n_neurons
 
-        if weights is None:
-            self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
-        else:
-            self.weights = weights
-        if bias is None:
-            self.bias = np.zeros((1, self.n_neurons))
-        else:
-            self.bias = bias
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+        self.bias = np.zeros((1, self.n_neurons))
         self.dw = None
         self.db = None
 
