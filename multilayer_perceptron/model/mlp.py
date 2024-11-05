@@ -1,9 +1,11 @@
 """Multilayer perceptron model."""
 
 import pickle
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
+from math import sqrt
 
 from . import algorithm, metrics
 
@@ -21,7 +23,8 @@ class DenseLayer:
         np.random.seed(SEED)
         self.n_neurons = n_neurons
 
-        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+        limit = sqrt(6.0 / n_inputs)
+        self.weights = np.random.uniform(low=-limit, high=limit, size=(n_inputs, n_neurons))
         self.bias = np.zeros((1, self.n_neurons))
         self.dw = None
         self.db = None
@@ -42,7 +45,7 @@ class DenseLayer:
         else:
             print("WARNING: Forward layer before activate it")
 
-    def forward_propagation(self, inputs) -> None:
+    def forward_propagation(self, inputs) -> Any:
         """Output of the perceptron.
 
         forward(self, inputs) -> Any
@@ -56,8 +59,10 @@ class MultilayerPerceptron:
     """Multilayer perceptron model."""
 
     def __init__(self, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
-        """MLP constructor."""
-        np.random.seed(SEED)
+        """MLP constructor.
+        
+        __init__(self, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None
+        """
         self.network = network
         self.learning_rate = learning_rate
         self.epochs = epochs
@@ -101,8 +106,8 @@ class MultilayerPerceptron:
         update(self) -> None
         """
         for layer in self.network:
-            layer.weights = layer.weights - self.learning_rate * layer.dw
-            layer.bias = layer.bias - self.learning_rate * layer.db
+            layer.weights -=   self.learning_rate * layer.dw
+            layer.bias -=  self.learning_rate * layer.db
 
     def fit(self, X: np.ndarray, y: np.ndarray, X_test, y_test) -> None:
         """Fit the model with givens X and y.

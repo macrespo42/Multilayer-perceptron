@@ -16,7 +16,7 @@ def softmax(z: np.ndarray) -> np.ndarray:
 
     softmax(z: np.ndarray) -> np.ndarray:
     """
-    exp_z = np.exp(z)
+    exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))
     return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 
 
