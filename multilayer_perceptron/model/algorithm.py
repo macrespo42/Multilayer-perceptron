@@ -25,5 +25,4 @@ def rlu(z: np.ndarray) -> np.ndarray:
 
     rlu(z: np.ndarray) -> np.ndarray
     """
-    z[z < 0] = 0
-    return z
+    return np.maximum(0, z)

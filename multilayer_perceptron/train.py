@@ -84,14 +84,14 @@ def train():
     else:
         network = [
             mlp.DenseLayer(input_shape, input_shape, activation="rlu"),
-            mlp.DenseLayer(24, 24, activation="rlu"),
-            mlp.DenseLayer(24, 24, activation="rlu"),
-            mlp.DenseLayer(24, 24, activation="rlu"),
-            mlp.DenseLayer(24, output_shape, activation="softmax"),
+            mlp.DenseLayer(24, 32, activation="rlu"),
+            mlp.DenseLayer(32, 32, activation="rlu"),
+            mlp.DenseLayer(32, 32, activation="rlu"),
+            mlp.DenseLayer(32, output_shape, activation="softmax"),
         ]
 
-    epochs = 6_500 if not args.epochs else args.epochs
-    learning_rate = 0.1 if not args.learning_rate else args.learning_rate
+    epochs = 60_000 if not args.epochs else args.epochs
+    learning_rate = 0.01 if not args.learning_rate else args.learning_rate
 
     model = mlp.MultilayerPerceptron(network, epochs=epochs, learning_rate=learning_rate)
     model.fit(X_norm, y_norm, X_test, y_test)

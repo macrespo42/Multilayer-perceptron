@@ -14,7 +14,7 @@ def separate(path: str, name="data", train_percentage=70) -> None:
     if train_percentage >= 99:
         raise ValueError("The train percentage is to high")
     df = read_csv_with_WDBC_headers(path)
-    df = df.sample(frac = 1)
+    df = df.sample(frac=1)
     train_stop_idx = math.floor((train_percentage / 100) * df.shape[0])
 
     data_train = df.iloc[0:train_stop_idx]

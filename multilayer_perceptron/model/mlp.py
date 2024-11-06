@@ -1,11 +1,11 @@
 """Multilayer perceptron model."""
 
 import pickle
+from math import sqrt
 from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
-from math import sqrt
 
 from . import algorithm, metrics
 
@@ -23,7 +23,7 @@ class DenseLayer:
         np.random.seed(SEED)
         self.n_neurons = n_neurons
 
-        limit = sqrt(6.0 / n_inputs)
+        limit = sqrt(2.0 / n_inputs)
         self.weights = np.random.uniform(low=-limit, high=limit, size=(n_inputs, n_neurons))
         self.bias = np.zeros((1, self.n_neurons))
         self.dw = None
@@ -60,7 +60,7 @@ class MultilayerPerceptron:
 
     def __init__(self, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None:
         """MLP constructor.
-        
+
         __init__(self, network: list[DenseLayer], learning_rate=0.1, epochs=1000) -> None
         """
         self.network = network
@@ -106,8 +106,8 @@ class MultilayerPerceptron:
         update(self) -> None
         """
         for layer in self.network:
-            layer.weights -=   self.learning_rate * layer.dw
-            layer.bias -=  self.learning_rate * layer.db
+            layer.weights -= self.learning_rate * layer.dw
+            layer.bias -= self.learning_rate * layer.db
 
     def fit(self, X: np.ndarray, y: np.ndarray, X_test, y_test) -> None:
         """Fit the model with givens X and y.
