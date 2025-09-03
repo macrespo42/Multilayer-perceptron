@@ -9,6 +9,10 @@ A Neural network in deep learning can be represented like this:
 
 ![neural network representation](screenshots/nn.jpg)
 
+The input layer is our input layer  
+The hiddens layers are where the magic append! Each neurons do a calculation with it own Weights and layer bias, then all neurons send the result to the neurons in the next layer
+And finally the output layer is the model prediction! In our case we got a simple classifier so 2 neurons in output (true or false to whether a cancer is malignant or benign )
+
 ## Requirements
 
 - [Poetry](https://python-poetry.org/)
